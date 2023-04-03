@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<h1>Задача 1</h1>
+
+	<script>
+		// Описати масив об’єктів
+		website = [
+			{
+				nameCompany: 'Johnson & Johnson',
+				ownerCompany: 'John Smith',
+				patron:[
+				{firstName: 'James', secondName: 'Brown', donation: 10000},
+				{firstName:'Elizabeth', secondName:'Cross', donation:8000},
+				{firstName:'Sarah', secondName:'Fletcher', donation:9000	},
+			],
+				yearMake:2008,
+				price: 5000
+			},
+
+			{
+				nameCompany: 'lipton',
+				ownerCompany: 'Lisa Bird',
+				patron: [
+					{firstName: 'Kimberly', secondName: 'Berry', donation: 75000},
+					{firstName: 'Mark', secondName: 'Owen', donation: 11000},
+					{firstName: 'Steven', secondName: 'Marshall', donation: 15000},
+				],
+				yearMake: 2005,
+				price: 20000
+			},
+
+			{
+				nameCompany: 'LION',
+				ownerCompany: 'Lisa Bird',
+				patron: [
+					{firstName: 'Donna', secondName: 'Walters', donation: 9500},
+					{firstName: 'Jeffrey', secondName: 'Newman', donation: 5000},
+					{firstName: 'Anna', secondName: 'Richardson', donation: 7000},
+				],
+				yearMake: 2011,
+				price: 35000
+			},
+		]
+		// знайти загальну вартість усіх сайтів
+			let totalWebsitePrice = website.reduce((prevSum, website) => prevSum + website.price,0)
+			document.write(`загальна вартість усіх сайтів ${totalWebsitePrice}<br>`)
+
+		// кількість сайтів, що було зроблено між 2000 та 2009 рр
+			let quantityWebsite = website.reduce((prevCounter, website) =>{
+				if (website.yearMake > 2000 && website.yearMake < 2009)
+							prevCounter ++
+				else prevCounter
+					return prevCounter
+			},0 )
+		document.write(`кількість сайтів, що було зроблено між 2000 та 2009 рр (${quantityWebsite})<br>`)
+
+		// кількість сайтів, де сума спонсорських вкладень була більшою за 100000
+				function quantityWebsiteDonationOver100000(website) {
+						let websiteCounter = 0
+						let priseDonations = 100000
+						for (let i = 0; i < website.length; i++) {
+							let sumDonations = 0
+							for (let j = 0; j < website[i].patron.length; j++) {
+								sumDonations += website[i].patron[j].donation
+							};
+							if (sumDonations > priseDonations) websiteCounter++
+						}
+						return websiteCounter
+					}
+					let result = quantityWebsiteDonationOver100000(website)
+		document.write(`кількість сайтів, де сума спонсорських вкладень була більшою за 100000 (${result})<br>`)
+
+		// створити загальний список усіх спонсорів (поки можуть повторюватись, просто зібрати усі у масив)
+		function getTotalListPatron(website) {
+				let patronArray = []
+				for (let i = 0; i < website.length; i++) {
+					for (let j = 0; j < website[i].patron.length; j++) {
+						let namePatron = `${website[i].patron[j].firstName} ${website[i].patron[j].secondName}`
+						patronArray.push(namePatron)
+					}
+				}
+				return patronArray
+			}
+			let totalListPatron = getTotalListPatron(website)
+			document.write(`список усіх спонсорів: ${totalListPatron.join(',  ')}<br>`)
+
+		// знайти рік, коли прибуток був найбільшим
+		let maxProfitForYear = website.reduce((prevPrice, website) => website.price > prevPrice.price ? website:prevPrice).yearMake
+			document.write(`рік, коли прибуток був найбільшим ${maxProfitForYear}<br>`)
+
+		// упорядкувати список за спаданням прибутку
+		function sortSelect(website) {
+		const preLastIndex = website.length - 1
+			for (let i = 0; i < preLastIndex; i++) {
+				let currentMaxPriceIndex = i
+				for (let j = i + 1; j < website.length; j++) {
+            if (website[j].price > website[currentMaxPriceIndex].price) currentMaxPriceIndex = j
+         }
+            if (i !== currentMaxPriceIndex) {
+               let tmp = website[i]
+            website[i] = website[currentMaxPriceIndex]
+            website[currentMaxPriceIndex] = tmp
+         }
+      }
+      return website
+      }
+		
+      document.write(`список за спаданням прибутку <br> ${JSON.stringify(sortSelect(website))}<br>`)
+
+		// cтворити 2 окремих списки з копіями об’єктів, що містять сайти з вартість до 10000 і більше 10000
+			function getListWebsiteOver10000(website) {
+				let listWebsiteOver10000 = []
+				for (const company of website)
+					if (company.price > 10000)
+						listWebsiteOver10000.push((JSON.parse(JSON.stringify(company))))
+				return listWebsiteOver10000
+			}
+			let result2 = getListWebsiteOver10000(website)
+			document.write(`копія об'єктів більше 10000 <br> ${JSON.stringify(result2)}<br>`)
+
+			// вартість до 10000
+			function getListWebsiteLess10000(website) {
+				let listWebsiteLess10000 = []
+				for (const company of website)
+					if (company.price < 10000)
+						listWebsiteLess10000.push((JSON.parse(JSON.stringify(company))))
+				return listWebsiteLess10000
+			}
+			let result3 = getListWebsiteLess10000(website)
+			document.write(`копія об'єктів менше 10000 <br> ${JSON.stringify(result3)}`)
+	</script>
+	
+</body>
+</html>
